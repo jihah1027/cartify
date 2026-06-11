@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | Cartify</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">Cartify</a>
+        <nav>
+            <a href="about.html">About</a>
+            <a href="index.html" class="active">Shop</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Your Everyday Cart, Made Easy</h1>
+            <p>Late-night study session at UUM? We deliver affordable snack combos right to your hostel.</p>
+        </section>
+
+        <section id="shop">
+            <h2 class="section-title">Choose Your Set</h2>
+            <div class="shop-grid">
+                
+                <div class="card">
+                    <img src="set_a_image.jpg" alt="Set A" class="card-img">
+                    <div class="card-info">
+                        <h3 class="card-title">Set A: The Light Craving</h3>
+                        <p class="card-price">RM 5.00</p>
+                        <p style="font-size: 0.9rem; margin-bottom: 1rem;">Perfect for a quick bite. Includes your favorite light snacks to keep you going.</p>
+                        <button class="btn" onclick="openModal('Set A: The Light Craving', 'RM 5.00')">Select Combo</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img src="set_b_image.jpg" alt="Set B" class="card-img">
+                    <div class="card-info">
+                        <h3 class="card-title">Set B: The Study Break</h3>
+                        <p class="card-price">RM 7.00</p>
+                        <p style="font-size: 0.9rem; margin-bottom: 1rem;">A balanced mix of snacks and drinks for your mid-study break.</p>
+                        <button class="btn" onclick="openModal('Set B: The Study Break', 'RM 7.00')">Select Combo</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img src="set_c_image.jpg" alt="Set C" class="card-img">
+                    <div class="card-info">
+                        <h3 class="card-title">Set C: The Full Experience</h3>
+                        <p class="card-price">RM 10.00</p>
+                        <p style="font-size: 0.9rem; margin-bottom: 1rem;">The heavy-hitter. Includes instant noodles and hearty snacks to replace a meal.</p>
+                        <button class="btn" onclick="openModal('Set C: The Full Experience', 'RM 10.00')">Select Combo</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 style="color: var(--primary-color); margin-bottom: 1rem;">Ready to Order?</h2>
+            <p>You selected: <br><strong id="selectedProductName">Set Name</strong> (<span id="selectedProductPrice">RM 0</span>)</p>
+            
+            <div class="instruction-box">
+                <p><strong>Step 1:</strong> Fill in your hostel delivery details.</p><br>
+                <p><strong>Step 2:</strong> Transfer payment via DuitNow (Details inside the form).</p><br>
+                <p><strong>Step 3:</strong> Send your receipt to our Admin via WhatsApp!</p>
+            </div>
+
+            <a href="YOUR_GOOGLE_FORM_LINK_HERE" target="_blank" class="btn" style="display: block; margin-bottom: 10px;">👉 1. Go to Order Form</a>
+            <a href="https://wa.me/YOUR_WHATSAPP_NUMBER_HERE?text=Hi%20Cartify!%20I%20just%20filled%20out%20the%20order%20form.%20Here%20is%20my%20payment%20receipt:" target="_blank" class="btn" style="display: block; background-color: #25D366;">📲 2. Send Receipt via WhatsApp</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Cartify | Universiti Utara Malaysia (UUM)</p>
+    </footer>
+
+    <script>
+        const modal = document.getElementById('orderModal');
+        function openModal(name, price) {
+            document.getElementById('selectedProductName').innerText = name;
+            document.getElementById('selectedProductPrice').innerText = price;
+            modal.style.display = 'flex';
+        }
+        function closeModal() { modal.style.display = 'none'; }
+        window.onclick = function(e) { if (e.target == modal) closeModal(); }
+    </script>
+</body>
+</html>
