@@ -366,25 +366,75 @@ footer { text-align: center; padding: 2rem; background: var(--white); color: var
     .popup-details { padding: 1.5rem; }
 }
 
-/* --- CONTACT PAGE STYLES --- */
-.contact-container {
-    max-width: 800px;
+/* --- UPGRADED CONTACT PAGE STYLES --- */
+.contact-wrapper {
+    max-width: 900px;
     margin: 0 auto;
     background: var(--white);
-    padding: 3rem;
     border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-    text-align: center;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08); 
+    display: flex;
+    overflow: hidden; /* Keeps the rounded corners clean */
+    flex-wrap: wrap; /* Helps with mobile responsiveness */
 }
 
-.contact-container form {
+.contact-info {
+    flex: 1;
+    min-width: 300px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 3rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-top: 1.5rem;
+    justify-content: center;
 }
 
-.contact-container input, .contact-container textarea {
+.contact-info h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--white);
+}
+
+.contact-info p {
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    font-size: 1.1rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.contact-form-container {
+    flex: 1.5;
+    min-width: 300px;
+    padding: 3.5rem 3rem;
+    background-color: var(--white);
+}
+
+.contact-form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+/* Places First & Last name next to each other */
+.form-row {
+    display: flex;
+    gap: 1.2rem;
+}
+
+.form-row input {
+    flex: 1;
+}
+
+.contact-form-container input, 
+.contact-form-container textarea {
     width: 100%;
     padding: 1rem;
     border: 2px solid var(--border-light);
@@ -392,11 +442,25 @@ footer { text-align: center; padding: 2rem; background: var(--white); color: var
     font-size: 1rem;
     font-family: inherit;
     transition: border-color 0.3s;
+    background-color: #fcfcfc; /* Very slight gray to separate from white background */
 }
 
-.contact-container input:focus, .contact-container textarea:focus {
+.contact-form-container input:focus, 
+.contact-form-container textarea:focus {
     outline: none;
     border-color: var(--primary-color);
+    background-color: var(--white);
+}
+
+/* Make it stack nicely on smaller screens */
+@media (max-width: 768px) {
+    .contact-wrapper {
+        flex-direction: column;
+    }
+    .form-row {
+        flex-direction: column;
+        gap: 1.2rem;
+    }
 }
 
 /* --- ABOUT PAGE STYLES --- */
