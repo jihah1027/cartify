@@ -9,7 +9,9 @@
 <body>
 
     <header>
-        <a href="index.html" class="logo">Cartify</a>
+        <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="Cartify Logo" style="height: 50px; width: auto; mix-blend-mode: multiply;">
+        </a>
         <div class="nav-links">
             <a href="about.html" class="active">About</a>
             <a href="index.html">Shop</a>
@@ -22,12 +24,49 @@
     </header>
 
     <main>
-        <section>
-            <h2 class="section-title">Our Campus Story</h2>
-            <div class="about-content">
-                <p><strong>Cartify</strong> is a campus-based snack delivery service operated by 10 dedicated students within Universiti Utara Malaysia (UUM). We know the struggle of late-night hunger when you're rushing assignments or studying for exams.</p>
-                <br>
-                <p>Our mission is simple: provide affordable, ready-to-eat snack bundles and deliver them fast, ensuring you never have to study on an empty stomach. From light cravings to full study-break meals, we've got your back.</p>
+        <section class="about-hero">
+            <div class="hero-text">
+                <span class="badge">Hungry?</span>
+                <h1>SNACKS MADE SIMPLE</h1>
+                <p><strong> Browse, order, and enjoy</strong> your favorite snack bundles with convenient campus-wide delivery. Whether you're craving a quick bite or need a study break feast, <strong>Cartify</strong> has you covered with delicious snacks delivered right to your location.</p>
+                <div class="hero-buttons">
+                    <a href="index.html" class="btn">Order Now</a>
+                    <a href="#why-choose-us" class="btn-text">Explore More &rarr;</a>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="curved-bg"></div>
+                <div class="main-img-circle">
+                    <img src="images/about image.png" alt="Snack Box">
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section" id="why-choose-us">
+            <div class="features-header">
+                <h2>WHY CHOOSE US?</h2>
+                <p>Affordable snack bundles, convenient ordering, and reliable delivery across the UUM campus.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🍜</div>
+                    <h3>Affordable Snack Bundles</h3>
+                    <p>Choose from a variety of snack sets designed to suit different preferences and budgets.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎒</div>
+                    <h3>Convenient Ordering</h3>
+                    <p>Place your order online in just a few clicks and enjoy a seamless ordering experience.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🚚</div>
+                    <h3>Campus-Wide Delivery</h3>
+                    <p>Get your snacks delivered to hostels, faculty buildings, offices, and other locations across UUM.</p>
+                </div>
             </div>
         </section>
     </main>
@@ -68,15 +107,21 @@
     </footer>
 
     <script>
-        let cart = [];
+        // UPGRADED: Now pulls from localStorage so the cart persists across pages
+        let cart = JSON.parse(localStorage.getItem('cartify_cart')) || [];
         const adminWhatsAppNumber = "60195028629"; 
+
+        // Update the badge number as soon as the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartUI();
+        });
 
         function toggleCart() {
             document.getElementById('cartDrawer').classList.toggle('active');
             document.getElementById('cartOverlay').classList.toggle('active');
             document.getElementById('checkout-steps').classList.remove('active');
             document.getElementById('checkout-btn').style.display = 'block';
-            updateCartUI(); // Ensures it looks right when opened
+            updateCartUI(); 
         }
 
         function removeFromCart(index) {
@@ -85,6 +130,9 @@
         }
 
         function updateCartUI() {
+            // Save the current cart state to browser memory
+            localStorage.setItem('cartify_cart', JSON.stringify(cart));
+
             const container = document.getElementById('cart-items-container');
             const totalDisplay = document.getElementById('cart-total-price');
             const badgeDisplay = document.getElementById('cart-count');
@@ -141,7 +189,6 @@
             document.getElementById('whatsapp-btn').href = whatsappUrl;
         }
 
-        // Make sure clicking the dark overlay closes the cart
         window.onclick = function(event) {
             if (event.target == document.getElementById('cartOverlay')) {
                 toggleCart();
