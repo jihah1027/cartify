@@ -10,18 +10,21 @@
 
     <header>
         <a href="index.html" class="logo">Cartify</a>
-        <nav>
+        <div class="nav-links">
             <a href="about.html" class="active">About</a>
             <a href="index.html">Shop</a>
             <a href="contact.html">Contact</a>
-        </nav>
+            
+            <div class="cart-icon-container" onclick="toggleCart()">
+                🛍️ <span class="cart-badge" id="cart-count">0</span>
+            </div>
+        </div>
     </header>
 
     <main>
         <section>
             <h2 class="section-title">Our Campus Story</h2>
             <div class="about-content">
-                <img src="your_logo.jpg" alt="Cartify Logo" style="max-width: 200px; margin-bottom: 2rem;">
                 <p><strong>Cartify</strong> is a campus-based snack delivery service operated by 10 dedicated students within Universiti Utara Malaysia (UUM). We know the struggle of late-night hunger when you're rushing assignments or studying for exams.</p>
                 <br>
                 <p>Our mission is simple: provide affordable, ready-to-eat snack bundles and deliver them fast, ensuring you never have to study on an empty stomach. From light cravings to full study-break meals, we've got your back.</p>
@@ -29,9 +32,121 @@
         </section>
     </main>
 
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <button class="close-cart" onclick="toggleCart()">&times;</button>
+        </div>
+        
+        <div class="cart-body" id="cart-items-container">
+            <p class="empty-cart-msg">Your cart is empty. Let's add some snacks!</p>
+        </div>
+
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Subtotal:</span>
+                <span id="cart-total-price">RM 0.00</span>
+            </div>
+            
+            <button class="btn" style="width: 100%;" id="checkout-btn" onclick="showCheckoutSteps()">Proceed to Checkout</button>
+            
+            <div class="checkout-steps" id="checkout-steps">
+                <hr style="border-top: 1px solid var(--border-light); margin: 1rem 0;">
+                <p><strong>1. Form:</strong> Fill out your delivery details.</p>
+                <a href="YOUR_GOOGLE_FORM_LINK_HERE" target="_blank" class="btn" style="width: 100%; margin: 10px 0; background-color: var(--text-dark);">📄 Open Order Form</a>
+                
+                <p><strong>2. Payment:</strong> Send us your receipt via WhatsApp to confirm the order.</p>
+                <a href="#" id="whatsapp-btn" target="_blank" class="btn" style="width: 100%; margin-top: 10px; background-color: #25D366;">📲 Send Receipt on WhatsApp</a>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <p>&copy; 2026 Cartify | Universiti Utara Malaysia (UUM)</p>
     </footer>
 
+    <script>
+        let cart = [];
+        const adminWhatsAppNumber = "60195028629"; 
+
+        function toggleCart() {
+            document.getElementById('cartDrawer').classList.toggle('active');
+            document.getElementById('cartOverlay').classList.toggle('active');
+            document.getElementById('checkout-steps').classList.remove('active');
+            document.getElementById('checkout-btn').style.display = 'block';
+            updateCartUI(); // Ensures it looks right when opened
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const totalDisplay = document.getElementById('cart-total-price');
+            const badgeDisplay = document.getElementById('cart-count');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            let total = 0;
+            let itemCount = 0;
+            container.innerHTML = ''; 
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="empty-cart-msg">Your cart is empty. Let\'s add some snacks!</p>';
+                checkoutBtn.disabled = true;
+                checkoutBtn.style.opacity = '0.5';
+            } else {
+                checkoutBtn.disabled = false;
+                checkoutBtn.style.opacity = '1';
+                
+                cart.forEach((item, index) => {
+                    total += (item.price * item.qty);
+                    itemCount += item.qty;
+                    
+                    container.innerHTML += `
+                        <div class="cart-item">
+                            <div class="item-details">
+                                <h4>${item.name}</h4>
+                                <p class="item-price">RM ${(item.price * item.qty).toFixed(2)} <span style="color: #999; font-size:0.8rem; font-weight:normal;">(Qty: ${item.qty})</span></p>
+                            </div>
+                            <button class="item-remove" onclick="removeFromCart(${index})">Remove</button>
+                        </div>
+                    `;
+                });
+            }
+
+            totalDisplay.innerText = `RM ${total.toFixed(2)}`;
+            badgeDisplay.innerText = itemCount;
+            generateWhatsAppLink(total.toFixed(2));
+        }
+
+        function showCheckoutSteps() {
+            if (cart.length > 0) {
+                document.getElementById('checkout-btn').style.display = 'none';
+                document.getElementById('checkout-steps').classList.add('active');
+            }
+        }
+
+        function generateWhatsAppLink(totalAmount) {
+            let message = "Hi Cartify! I just filled out the Google Form. Here is my order summary:%0A%0A";
+            cart.forEach(item => {
+                message += `- ${item.qty}x ${item.name}%0A`;
+            });
+            message += `%0A*Total: RM ${totalAmount}*%0A%0AAttached is my payment receipt:`;
+            
+            const whatsappUrl = `https://wa.me/${adminWhatsAppNumber}?text=${message}`;
+            document.getElementById('whatsapp-btn').href = whatsappUrl;
+        }
+
+        // Make sure clicking the dark overlay closes the cart
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('cartOverlay')) {
+                toggleCart();
+            }
+        }
+    </script>
 </body>
 </html>

@@ -10,11 +10,15 @@
 
     <header>
         <a href="index.html" class="logo">Cartify</a>
-        <nav>
+        <div class="nav-links">
             <a href="about.html">About</a>
             <a href="index.html" class="active">Shop</a>
             <a href="contact.html">Contact</a>
-        </nav>
+            
+            <div class="cart-icon-container" onclick="toggleCart()">
+                🛍️ <span class="cart-badge" id="cart-count">0</span>
+            </div>
+        </div>
     </header>
 
     <main>
@@ -28,32 +32,44 @@
             <div class="shop-grid">
                 
                 <div class="card">
-                    <img src="set_a_image.jpg" alt="Set A" class="card-img">
+                    <img src="set_a_image.jpg" alt="Set A" class="card-img" style="cursor: pointer;" onclick="openProductDetails('Set A: The Light Craving', 5.00, 'Perfect for a quick bite. Includes your favorite light snacks to keep you going.', 'set_a_image.jpg')">
                     <div class="card-info">
                         <h3 class="card-title">Set A: The Light Craving</h3>
                         <p class="card-price">RM 5.00</p>
                         <p style="font-size: 0.9rem; margin-bottom: 1rem;">Perfect for a quick bite. Includes your favorite light snacks to keep you going.</p>
-                        <button class="btn" onclick="openModal('Set A: The Light Craving', 'RM 5.00')">Select Combo</button>
+                        
+                        <div class="card-actions">
+                            <button class="btn btn-outline" onclick="openProductDetails('Set A: The Light Craving', 5.00, 'Perfect for a quick bite. Includes your favorite light snacks to keep you going.', 'set_a_image.jpg')">View Details</button>
+                            <button class="btn" onclick="addToCart('Set A: The Light Craving', 5.00)">Add to Cart</button>
+                        </div>
                     </div>
                 </div>
 
                 <div class="card">
-                    <img src="set_b_image.jpg" alt="Set B" class="card-img">
+                    <img src="set_b_image.jpg" alt="Set B" class="card-img" style="cursor: pointer;" onclick="openProductDetails('Set B: The Study Break', 7.00, 'A balanced mix of snacks and drinks for your mid-study break. Gives you the perfect energy boost.', 'set_b_image.jpg')">
                     <div class="card-info">
                         <h3 class="card-title">Set B: The Study Break</h3>
                         <p class="card-price">RM 7.00</p>
                         <p style="font-size: 0.9rem; margin-bottom: 1rem;">A balanced mix of snacks and drinks for your mid-study break.</p>
-                        <button class="btn" onclick="openModal('Set B: The Study Break', 'RM 7.00')">Select Combo</button>
+                        
+                        <div class="card-actions">
+                            <button class="btn btn-outline" onclick="openProductDetails('Set B: The Study Break', 7.00, 'A balanced mix of snacks and drinks for your mid-study break. Gives you the perfect energy boost.', 'set_b_image.jpg')">View Details</button>
+                            <button class="btn" onclick="addToCart('Set B: The Study Break', 7.00)">Add to Cart</button>
+                        </div>
                     </div>
                 </div>
 
                 <div class="card">
-                    <img src="set_c_image.jpg" alt="Set C" class="card-img">
+                    <img src="set_c_image.jpg" alt="Set C" class="card-img" style="cursor: pointer;" onclick="openProductDetails('Set C: The Full Experience', 10.00, 'The heavy-hitter. Includes instant noodles and hearty snacks to replace a meal and keep you full.', 'set_c_image.jpg')">
                     <div class="card-info">
                         <h3 class="card-title">Set C: The Full Experience</h3>
                         <p class="card-price">RM 10.00</p>
                         <p style="font-size: 0.9rem; margin-bottom: 1rem;">The heavy-hitter. Includes instant noodles and hearty snacks to replace a meal.</p>
-                        <button class="btn" onclick="openModal('Set C: The Full Experience', 'RM 10.00')">Select Combo</button>
+                        
+                        <div class="card-actions">
+                            <button class="btn btn-outline" onclick="openProductDetails('Set C: The Full Experience', 10.00, 'The heavy-hitter. Includes instant noodles and hearty snacks to replace a meal and keep you full.', 'set_c_image.jpg')">View Details</button>
+                            <button class="btn" onclick="addToCart('Set C: The Full Experience', 10.00)">Add to Cart</button>
+                        </div>
                     </div>
                 </div>
 
@@ -61,20 +77,59 @@
         </section>
     </main>
 
-    <div class="modal" id="orderModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h2 style="color: var(--primary-color); margin-bottom: 1rem;">Ready to Order?</h2>
-            <p>You selected: <br><strong id="selectedProductName">Set Name</strong> (<span id="selectedProductPrice">RM 0</span>)</p>
-            
-            <div class="instruction-box">
-                <p><strong>Step 1:</strong> Fill in your hostel delivery details.</p><br>
-                <p><strong>Step 2:</strong> Transfer payment via DuitNow (Details inside the form).</p><br>
-                <p><strong>Step 3:</strong> Send your receipt to our Admin via WhatsApp!</p>
-            </div>
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <button class="close-cart" onclick="toggleCart()">&times;</button>
+        </div>
+        
+        <div class="cart-body" id="cart-items-container">
+            <p class="empty-cart-msg">Your cart is empty. Let's add some snacks!</p>
+        </div>
 
-            <a href="YOUR_GOOGLE_FORM_LINK_HERE" target="_blank" class="btn" style="display: block; margin-bottom: 10px;">👉 1. Go to Order Form</a>
-            <a href="https://wa.me/YOUR_WHATSAPP_NUMBER_HERE?text=Hi%20Cartify!%20I%20just%20filled%20out%20the%20order%20form.%20Here%20is%20my%20payment%20receipt:" target="_blank" class="btn" style="display: block; background-color: #25D366;">📲 2. Send Receipt via WhatsApp</a>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Subtotal:</span>
+                <span id="cart-total-price">RM 0.00</span>
+            </div>
+            
+            <button class="btn" style="width: 100%;" id="checkout-btn" onclick="showCheckoutSteps()">Proceed to Checkout</button>
+            
+            <div class="checkout-steps" id="checkout-steps">
+                <hr style="border-top: 1px solid var(--border-light); margin: 1rem 0;">
+                <p><strong>1. Form:</strong> Fill out your delivery details.</p>
+                <a href="YOUR_GOOGLE_FORM_LINK_HERE" target="_blank" class="btn" style="width: 100%; margin: 10px 0; background-color: var(--text-dark);">📄 Open Order Form</a>
+                
+                <p><strong>2. Payment:</strong> Send us your receipt via WhatsApp to confirm the order.</p>
+                <a href="#" id="whatsapp-btn" target="_blank" class="btn" style="width: 100%; margin-top: 10px; background-color: #25D366;">📲 Send Receipt on WhatsApp</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-modal" id="productModal">
+        <div class="popup-content">
+            <button class="popup-close-btn" onclick="closeProductModal()">&times;</button>
+            
+            <div class="popup-layout">
+                <div class="popup-image">
+                    <img id="detail-img" src="" alt="Product Image">
+                </div>
+                
+                <div class="popup-details">
+                    <h2 id="detail-title">Product Title</h2>
+                    <p class="price" id="detail-price">RM 0.00</p>
+                    <p class="description" id="detail-desc">Description goes here.</p>
+                    
+                    <div class="qty-box">
+                        <label for="detail-qty">Quantity</label>
+                        <input type="number" id="detail-qty" value="1" min="1">
+                    </div>
+                    
+                    <button class="btn" id="detail-add-btn" style="width: 100%;">Add to Cart</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -83,14 +138,137 @@
     </footer>
 
     <script>
-        const modal = document.getElementById('orderModal');
-        function openModal(name, price) {
-            document.getElementById('selectedProductName').innerText = name;
-            document.getElementById('selectedProductPrice').innerText = price;
-            modal.style.display = 'flex';
+        let cart = [];
+        const adminWhatsAppNumber = "60195028629"; // Update to your admin number
+
+        // Cart Drawer Logic
+        function toggleCart() {
+            document.getElementById('cartDrawer').classList.toggle('active');
+            document.getElementById('cartOverlay').classList.toggle('active');
+            document.getElementById('checkout-steps').classList.remove('active');
+            document.getElementById('checkout-btn').style.display = 'block';
         }
-        function closeModal() { modal.style.display = 'none'; }
-        window.onclick = function(e) { if (e.target == modal) closeModal(); }
+
+        function addToCart(itemName, itemPrice) {
+            const existingItem = cart.find(item => item.name === itemName);
+            if (existingItem) {
+                existingItem.qty += 1;
+            } else {
+                cart.push({ name: itemName, price: itemPrice, qty: 1 });
+            }
+            updateCartUI();
+            toggleCart(); 
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const totalDisplay = document.getElementById('cart-total-price');
+            const badgeDisplay = document.getElementById('cart-count');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            let total = 0;
+            let itemCount = 0;
+            container.innerHTML = ''; 
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="empty-cart-msg">Your cart is empty. Let\'s add some snacks!</p>';
+                checkoutBtn.disabled = true;
+                checkoutBtn.style.opacity = '0.5';
+            } else {
+                checkoutBtn.disabled = false;
+                checkoutBtn.style.opacity = '1';
+                
+                cart.forEach((item, index) => {
+                    total += (item.price * item.qty);
+                    itemCount += item.qty;
+                    
+                    container.innerHTML += `
+                        <div class="cart-item">
+                            <div class="item-details">
+                                <h4>${item.name}</h4>
+                                <p class="item-price">RM ${(item.price * item.qty).toFixed(2)} <span style="color: #999; font-size:0.8rem; font-weight:normal;">(Qty: ${item.qty})</span></p>
+                            </div>
+                            <button class="item-remove" onclick="removeFromCart(${index})">Remove</button>
+                        </div>
+                    `;
+                });
+            }
+
+            totalDisplay.innerText = `RM ${total.toFixed(2)}`;
+            badgeDisplay.innerText = itemCount;
+            generateWhatsAppLink(total.toFixed(2));
+        }
+
+        function showCheckoutSteps() {
+            if (cart.length > 0) {
+                document.getElementById('checkout-btn').style.display = 'none';
+                document.getElementById('checkout-steps').classList.add('active');
+            }
+        }
+
+        function generateWhatsAppLink(totalAmount) {
+            let message = "Hi Cartify! I just filled out the Google Form. Here is my order summary:%0A%0A";
+            
+            cart.forEach(item => {
+                message += `- ${item.qty}x ${item.name}%0A`;
+            });
+            
+            message += `%0A*Total: RM ${totalAmount}*%0A%0AAttached is my payment receipt:`;
+            
+            const whatsappUrl = `https://wa.me/${adminWhatsAppNumber}?text=${message}`;
+            document.getElementById('whatsapp-btn').href = whatsappUrl;
+        }
+
+        // Quick View Modal Logic
+        const productModal = document.getElementById('productModal');
+
+        function openProductDetails(name, price, desc, imgSrc) {
+            document.getElementById('detail-title').innerText = name;
+            document.getElementById('detail-price').innerText = `RM ${price.toFixed(2)}`;
+            document.getElementById('detail-desc').innerText = desc;
+            document.getElementById('detail-img').src = imgSrc;
+            document.getElementById('detail-qty').value = 1; 
+
+            document.getElementById('detail-add-btn').onclick = function() {
+                addToCartFromDetails(name, price);
+            };
+
+            productModal.style.display = 'flex';
+        }
+
+        function closeProductModal() {
+            productModal.style.display = 'none';
+        }
+
+        function addToCartFromDetails(name, price) {
+            let qty = parseInt(document.getElementById('detail-qty').value);
+            if (isNaN(qty) || qty < 1) qty = 1;
+
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.qty += qty;
+            } else {
+                cart.push({ name: name, price: price, qty: qty });
+            }
+            
+            updateCartUI();
+            closeProductModal(); 
+            toggleCart(); 
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('cartOverlay')) {
+                toggleCart();
+            }
+            if (event.target == productModal) {
+                closeProductModal();
+            }
+        }
     </script>
 </body>
 </html>
